@@ -1,0 +1,7 @@
+	<ul>
+		{foreach from=$categories item='category' name='category'}
+		<li class="level_parent_{$category->level}" >
+			<label><input type="checkbox" name="ct[]" value="{$category->id}" />{$category->name}</label>
+		</li>
+		{/foreach}
+	</ul>

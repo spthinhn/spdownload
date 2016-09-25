@@ -1,0 +1,28 @@
+<div class="ow_narrow ow_left">
+{form name="form_category_add" }
+<table class="ow_table_1 ow_form ">
+<tr class="ow_alt1">
+	<td class="ow_value">{label name="nameCategory" }</td>
+	<td class="ow_value">{input name="nameCategory" }</td>
+</tr>
+<tr class="ow_alt1">
+	<td class="ow_value">{label name="parentCategory" }</td>
+	<td class="ow_value">{input name="parentCategory" }</td>
+</tr>
+<tr>
+	<td class="ow_center" colspan="2">{submit name="form_category_add"}</td>
+</tr>
+</table>
+{/form}
+</div>
+<div class="ow_narrow ow_right">
+	<ul id="category">
+	{foreach from=$categories item='category' name='category'}
+	<li class="level_parent_{$category->level}" >
+		<label><input class="radioCheck" type="radio" name="ct2[]" value="{$category->id}/{$category->name}" />{$category->name}</label>
+	</li>
+	{/foreach}
+	</ul>
+	{decorator name="button" class="btn_cate_edit ow_ic_write" langLabel='spdownload+edit' }
+	{decorator name="button" class="btn_cate_delete ow_ic_delete" langLabel='spdownload+delete' }
+</div>
