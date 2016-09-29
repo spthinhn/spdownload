@@ -1,28 +1,42 @@
-<div class="ow_narrow ow_left">
+<div class="ow_wide ow_left">
 {form name="form_category_add" }
 <table class="ow_table_1 ow_form ">
 <tr class="ow_alt1">
 	<td class="ow_value">{label name="nameCategory" }</td>
-	<td class="ow_value">{input name="nameCategory" }</td>
+	<td class="ow_value" {if $check } colspan="2" {/if}>{input name="nameCategory" }</td>
 </tr>
 <tr class="ow_alt1">
 	<td class="ow_value">{label name="parentCategory" }</td>
-	<td class="ow_value">{input name="parentCategory" }</td>
+	<td class="ow_value" {if $check } colspan="2" {/if}>{input name="parentCategory" style="width:100%"}</td>
 </tr>
 <tr>
-	<td class="ow_center" colspan="2">{submit name="form_category_add"}</td>
+	<td class="ow_center" {if !$check } colspan="2" {/if}>{submit name="form_category_add" class="ow_ic_save"}</td>
+	{if $check }
+	<td>{decorator name="button" class="btn_cate_delete ow_ic_trash" langLabel='spdownload+delete' }</td>
+	<td>{decorator name="button" class="btn_cate_delete ow_ic_close" langLabel='spdownload+cancel' }</td>
+	{/if}
 </tr>
 </table>
 {/form}
 </div>
+{if !$check }
 <div class="ow_narrow ow_right">
-	<ul id="category">
-	{foreach from=$categories item='category' name='category'}
-	<li class="level_parent_{$category->level}" >
-		<label><input class="radioCheck" type="radio" name="ct2[]" value="{$category->id}/{$category->name}" />{$category->name}</label>
-	</li>
-	{/foreach}
-	</ul>
-	{decorator name="button" class="btn_cate_edit ow_ic_write" langLabel='spdownload+edit' }
-	{decorator name="button" class="btn_cate_delete ow_ic_delete" langLabel='spdownload+delete' }
+	<table class="ow_table_1 ow_form ">
+	<tr>
+		<td >
+			<ul id="category">
+				{foreach from=$categories item='category' name='category'}
+				<li class="level_parent_{$category->level}" >
+					<label><input class="radioCheck" type="radio" name="ct2[]" value="{$category->id}/{$category->name}" />{$category->name}</label>
+				</li>
+				{/foreach}
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>{decorator name="button" class="btn_cate_edit ow_ic_write disabled" langLabel='spdownload+edit' }</td>
+		
+	</tr>
+	</table>
 </div>
+{/if}

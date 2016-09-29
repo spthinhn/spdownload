@@ -29,8 +29,6 @@ class SPDOWNLOAD_BOL_CategoryDao extends OW_BaseDao
         return OW_DB_PREFIX . 'spdownload_category';
     }
 
-    
-    
     public function getCategoryListByParent($parent)
     {
     	$example = new OW_Example();

@@ -32,11 +32,15 @@ class SPDOWNLOAD_BOL_CategoryService
         $category->parent = $data["parent"];
         SPDOWNLOAD_BOL_CategoryDao::getInstance()->save($category);
 
-        BOL_LanguageService::getInstance()->addValue(
-            OW::getLanguage()->getCurrentId(),
-            'spdownload',
-            $this->getCategoryKey($category->id),
-            trim($category->name));
+        if (isset($data["id"])) {
+            BOL_LanguageService::getInstance()->replaceLangValue('spdownload',$this->getCategoryKey($category->id),trim($category->name));
+        } else {
+            BOL_LanguageService::getInstance()->addValue(
+                OW::getLanguage()->getCurrentId(),
+                'spdownload',
+                $this->getCategoryKey($category->id),
+                trim($category->name));
+        }
     }
 
     private function getCategoryKey( $name )

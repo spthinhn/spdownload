@@ -1,6 +1,8 @@
 
 $(".radioCheck").change(function(){
+	$(".radioCheck").parent().removeAttr("style");
 	var result = $(this).val();
+	$(this).parent().css("color","red");
 	$(".btn_cate_edit").attr("data-href",result);
 });
 
