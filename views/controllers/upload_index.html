@@ -1,0 +1,30 @@
+{form name="form_upload" }
+<div class="ow_supernarrow ow_right">
+{submit name="upload" class="ow_ic_save"}
+</div>
+<div class="clearfix"></div>
+<div class="ow_wide ow_left">
+	<table class="ow_table_1 ow_form ">
+		<tr class="ow_alt1">
+			<td class="ow_value">{label name="upname" }</td>
+			<td class="ow_value" {if $check } colspan="2" {/if}>{input name="upname" }</td>
+		</tr>
+		<tr class="ow_alt1">
+			<td class="ow_value">{label name="upslug" }</td>
+			<td class="ow_value" {if $check } colspan="2" {/if}>{input name="upslug" }</td>
+		</tr>
+		<tr class="ow_alt1">
+			<td class="ow_value">{label name="updescription" }</td>
+			<td class="ow_value" {if $check } colspan="2" {/if}>{input name="updescription" }</td>
+		</tr>
+		<tr class="ow_alt1">
+			<td class="ow_value">{label name="uplicense" }</td>
+			<td class="ow_value" {if $check } colspan="2" {/if}>{input name="uplicense" }</td>
+		</tr>
+	</table>
+</div>
+<div class="ow_narrow ow_right">
+{$cmpCategory}
+
+</div>
+{/form}
