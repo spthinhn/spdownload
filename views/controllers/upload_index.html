@@ -3,6 +3,7 @@
 {submit name="upload" class="ow_ic_save"}
 </div>
 <div class="clearfix"></div>
+<br>
 <div class="ow_wide ow_left">
 	<table class="ow_table_1 ow_form ">
 		<tr class="ow_alt1">
@@ -24,14 +25,42 @@
 	</table>
 </div>
 <div class="ow_narrow ow_right">
-<input style="display:none" id="fileupload" type="file" name="files[]">
-<span class="ow_button">
-	<span class="ow_positive">
-		<input value="Browse" id="file_btn_browse" name="browse" type="button" class="ow_ic_folder">
-	</span>
-</span>
+<table class="ow_table_1 ow_form">
+	<tbody>
+		<tr class="ow_alt2 ow_tr_first">
+			<td class="ow_value" style="width:1%;text-align: center;">
+				<p>Select file !!!</p>
+			</td>
+			<td style="width:1%;text-align: center;">
+				<input style="display:none" id="fileupload" name="files[]" type="file">
+				<span class="ow_button">
+					<span class="ow_positive">
+						<input value="Browse" id="file_btn_browse" name="browse" class="ow_ic_folder" type="button">
+					</span>
+				</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+	<table id="Listfile" >
+		<thead>
+			<tr>
+				<th></th>
+				<th>File</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody >
+			
+		</tbody>
+	</table>
 {$cmpCategory}
 
 </div>
 {/form}
 
+<script type="text/javascript">
+	$(document).on('click', '#file_btn_browse', function(){
+		$('#fileupload').click();
+	});
+</script>

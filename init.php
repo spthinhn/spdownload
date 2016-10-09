@@ -8,3 +8,4 @@ OW::getRouter()->addRoute(new OW_Route('spdownload.index', 'downloads', "SPDOWNL
 
 OW::getRouter()->addRoute(new OW_Route('spdownload.upload_index', 'downloads/new', "SPDOWNLOAD_CTRL_Upload", 'index'));
 OW::getRouter()->addRoute(new OW_Route('spdownload.upload_file', 'downloads/uploadFile', "SPDOWNLOAD_CTRL_Upload", 'uploadFile'));
+OW::getRouter()->addRoute(new OW_Route('spdownload.resumable', 'downloads/resumable', "SPDOWNLOAD_CTRL_Upload", 'resumable'));

@@ -33,6 +33,9 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 
 		$categories = $this->listcategory();
 		$this->assign("categories", $categories);
+
+		$cmpCategory = new SPDOWNLOAD_CMP_Category();
+		$this->addComponent('cmpCategory', $cmpCategory);
 		
 		if ( OW::getRequest()->isPost() )
         {

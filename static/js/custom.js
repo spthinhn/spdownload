@@ -8,7 +8,7 @@ $(".radioCheck").change(function(){
 
 $(".btn_cate_edit").click(function(){
 	var ref = $(this).attr("data-href");
-	var url = window.location.hostname + "/download/category/" + ref;
+	var url = window.location.hostname + "/downloads/category/" + ref;
 	
 	window.location.replace("//"+url);
 });

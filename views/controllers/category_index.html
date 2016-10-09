@@ -25,13 +25,7 @@
 	<table class="ow_table_1 ow_form ">
 	<tr>
 		<td >
-			<ul id="category">
-				{foreach from=$categories item='category' name='category'}
-				<li class="level_parent_{$category->level}" >
-					<label><input class="radioCheck" type="radio" name="ct2[]" value="{$category->id}/{$category->name}" />{$category->name}</label>
-				</li>
-				{/foreach}
-			</ul>
+			{$cmpCategory}
 		</td>
 	</tr>
 	<tr>

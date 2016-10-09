@@ -1,7 +1,12 @@
-	<ul>
-		{foreach from=$categories item='category' name='category'}
-		<li class="level_parent_{$category->level}" >
-			<label><input type="checkbox" name="ct[]" value="{$category->id}" />{$category->name}</label>
-		</li>
-		{/foreach}
-	</ul>
+
+{block_decorator name='box' addClass='ow_stdmargin' langLabel = 'spdownload+category' iconClass='ow_ic_star'}
+<ul id="category">
+	{foreach from=$categories item='category' name='category'}
+	<li class="level_parent_{$category->level}" >
+		<label><input class="radioCheck" type="radio" name="ct2[]" value="{$category->id}/{$category->name}" />{$category->name}</label>
+	</li>
+	{/foreach}
+</ul>
+{/block_decorator}
+
+
