@@ -25,3 +25,6 @@
 	position:absolute;
 	line-height:inherit
 }
+.clickImg:hover {
+	cursor: pointer;
+}

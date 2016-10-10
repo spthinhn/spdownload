@@ -22,18 +22,19 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 		$document->addScript($plugin->getStaticJsUrl().'jquery.fileupload-video.js');
 		$document->addScript($plugin->getStaticJsUrl().'jquery.fileupload-validate.js');
 		$document->addScript($plugin->getStaticJsUrl().'resumable.js');
+		$pathImgNone = $plugin->getStaticUrl().'img/icon_none.png';
+        $this->assign("pathImgNone", $pathImgNone);
 		
 		$urlUploadHandler = OW::getRouter()->urlForRoute('spdownload.resumable');
         $path = $plugin->getUserFilesUrl();
+        $pathTemp = $path.'temp/';
         $loadimage = $plugin->getStaticUrl().'img/' . 'loading.gif';
-        
+
         $script = "
-        	var percent = 0;
-        	var total = 0;
+        	var pathTemp = '$pathTemp';
 			var r = new Resumable({
 			  target:'$urlUploadHandler', 
 			  simultaneousUploads:1,
-			  
 			});
 			 
 			r.assignBrowse(document.getElementById('fileupload'));
@@ -63,10 +64,7 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			r.on('uploadStart', function(){
 			  });
 			r.on('complete', function(){
-				
 				$('#file_progress').remove();
-				total = 0;
-				percent = 0;
 			  });
 			r.on('progress', function(){
 				var width = r.progress()*100;
@@ -79,13 +77,34 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			  });
 			r.on('cancel', function(){
 				$('#file_progress').remove();
-					total = 0;
-					percent = 0;
 				file = r.getFromUniqueIdentifier(identifier);
         		r.removeFile(file);
-
 			  });
 
+			var i = new Resumable({
+			  target:'$urlUploadHandler', 
+			  simultaneousUploads:1,
+			});  
+			i.assignBrowse(document.getElementById('iconUpload'));
+
+			i.on('fileSuccess', function(file){
+				var imgIcon = pathTemp + file.fileName;
+				$('#imgIcon').attr('src', imgIcon);
+			  });
+			i.on('fileAdded', function(file, event){
+				i.upload();
+			  });
+			i.on('fileRetry', function(file){
+			  });
+			i.on('fileError', function(file, message){
+				console.log(file);
+			  });
+			i.on('complete', function(){
+			  });
+			i.on('progress', function(){
+				$('#imgIcon').attr('src', '$loadimage');
+			  });
+			  
 		  	$(document).on('click', '.deleteFileProgress', function() {
 		  		r.cancel();
 			});
