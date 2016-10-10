@@ -44,9 +44,7 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			    console.log(file);
 			  });
 			r.on('fileProgress', function(file){
-				percent++; 
-				var width = percent*100/ total;
-			    $('.sp-progressbar').css('width', (width/3) + \"%\");
+
 			  });
 			r.on('fileAdded', function(file, event){
 			    r.upload();
@@ -55,6 +53,8 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			    total = file.chunks.length;
 			  });
 			r.on('filesAdded', function(array){
+				console.log(array[0]);
+				console.log(array[1]);
 			  });
 			r.on('fileRetry', function(file){
 			  });
@@ -69,6 +69,9 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 				percent = 0;
 			  });
 			r.on('progress', function(){
+				var width = r.progress()*100;
+			    $('.sp-progressbar').css('width', width + \"%\");
+			    console.log(width);
 			  });
 			r.on('error', function(message, file){
 			  });
