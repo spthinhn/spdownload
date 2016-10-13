@@ -60,56 +60,44 @@
 		<table class="ow_forum">
 			<tr>
 				<td align="center">
-					<input style="display:none" id="iconUpload" name="icon" type="file">
+					<input style="display:none" id="iconUpload" accept="image/*" name="icon" type="file">
 					<label class="clickImg" for="iconUpload" ><img id="imgIcon" src="{$pathImgNone}" /></label>
 				</td>
 			</tr>
 		</table>
+
 		
 	{/block_decorator}
 </div>
 <div class="clearfix"></div>
 <br>
 {block_decorator name='box' addClass='ow_stdmargin' langLabel = 'spdownload+img_thumb' iconClass='ow_ic_star'}
-	<div class="ow_left">
-		<img id="imgIcon" src="/ow_userfiles/plugins/spdownload/temp/images.jpeg" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
-	<div class="ow_left">
-		<img id="imgIcon" src="{$pathImgNone}" />
-	</div>
+	<input style="display:none" id="thumbsUpload" name="thumbs[]" multiple="" type="file">
+	<table>
+		<tr>
+			<td>
+				<div class="ow_left">
+					<label for="thumbsUpload">
+							<div id="file_btn_thumb" class="upload ow_left">
+								<div class="ow_add_item"></div>
+							</div>
+					</label>
+				</div>
+			</td>
+			<td>
+				<div id="listthumb" class="ow_right">
+					<div class=".divThumb ow_left">
+						<img src="{$pathImgNone}" />
+					</div>
+					<div class=".divThumb ow_left">
+						<img src="{$pathImgNone}" />
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+	
+	
 <div class="clearfix"></div>
 <br>
 {/block_decorator}

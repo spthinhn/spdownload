@@ -27,14 +27,16 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 		
 		$urlUploadHandler = OW::getRouter()->urlForRoute('spdownload.resumable');
         $path = $plugin->getUserFilesUrl();
-        $pathTemp = $path.'temp/';
         $loadimage = $plugin->getStaticUrl().'img/' . 'loading.gif';
+        $userId = OW::getUser()->getId();
+        $pathTemp = $path.'temp/'.$userId.'/';
 
         $script = "
         	var pathTemp = '$pathTemp';
 			var r = new Resumable({
 			  target:'$urlUploadHandler', 
 			  simultaneousUploads:1,
+			  maxFiles:1,
 			});
 			 
 			r.assignBrowse(document.getElementById('fileupload'));
@@ -43,9 +45,6 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			    var str = '<tr><td align=\"center\" ><input class=\"buttonradio\" name=\"main\" value=\"'+ file.fileName +'\" type=\"radio\"></td><td align=\"center\" >'+ file.fileName +'</td><td align=\"center\" ><a class=\"delete_file\"><div class=\"ow_ic_delete\"></div></a></td></tr>'
 			    $('#Listfile tbody').append( str );
 			    console.log(file);
-			  });
-			r.on('fileProgress', function(file){
-
 			  });
 			r.on('fileAdded', function(file, event){
 			    r.upload();
@@ -57,12 +56,6 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 				console.log(array[0]);
 				console.log(array[1]);
 			  });
-			r.on('fileRetry', function(file){
-			  });
-			r.on('fileError', function(file, message){
-			  });
-			r.on('uploadStart', function(){
-			  });
 			r.on('complete', function(){
 				$('#file_progress').remove();
 			  });
@@ -72,18 +65,18 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			    console.log(width);
 			  });
 			r.on('error', function(message, file){
-			  });
-			r.on('pause', function(){
+				r.error();
+				$('#file_progress').remove();
 			  });
 			r.on('cancel', function(){
 				$('#file_progress').remove();
-				file = r.getFromUniqueIdentifier(identifier);
-        		r.removeFile(file);
+				
 			  });
 
 			var i = new Resumable({
 			  target:'$urlUploadHandler', 
 			  simultaneousUploads:1,
+			  maxFiles:1,
 			});  
 			i.assignBrowse(document.getElementById('iconUpload'));
 
@@ -104,7 +97,33 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			i.on('progress', function(){
 				$('#imgIcon').attr('src', '$loadimage');
 			  });
-			  
+			
+
+			var t = new Resumable({
+			  target:'$urlUploadHandler', 
+			  simultaneousUploads:1,
+			});  
+			t.assignBrowse(document.getElementById('thumbsUpload'));
+
+			t.on('fileSuccess', function(file){
+				var imgThumb = pathTemp + file.fileName;
+				$('#imgThumb').attr('src', imgThumb);
+			  });
+			t.on('fileAdded', function(file, event){
+				var str = '<div class=\".divThumb ow_left\"><img class=\"imgThumb\" src=\"$loadimage\"/>					</div>'
+				t.upload();
+			  });
+			t.on('fileRetry', function(file){
+			  });
+			t.on('fileError', function(file, message){
+				console.log(file);
+			  });
+			t.on('complete', function(){
+			  });
+			t.on('progress', function(){
+			  });
+
+
 		  	$(document).on('click', '.deleteFileProgress', function() {
 		  		r.cancel();
 			});
@@ -139,6 +158,7 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 	{
 		$plugin = OW::getPluginManager()->getPlugin('spdownload');
         $path = $plugin->getUserFilesDir();
+        $userId = OW::getUser()->getId();
 
 		if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
@@ -172,7 +192,7 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 		    // init the destination file (format <filename.ext>.part<#chunk>
 		    // the file is stored in a temporary directory
 		    if(isset($_POST['resumableIdentifier']) && trim($_POST['resumableIdentifier'])!=''){
-		        $temp_dir = $path.'temp/'.$_POST['resumableIdentifier'];
+		        $temp_dir = $path.'temp/'.$userId.'/'.$_POST['resumableIdentifier'];
 		    }
 		    $dest_file = $temp_dir.'/'.$_POST['resumableFilename'].'.part'.$_POST['resumableChunkNumber'];
 
@@ -227,7 +247,8 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 	{
 		$plugin = OW::getPluginManager()->getPlugin('spdownload');
         $path = $plugin->getUserFilesDir();
-        
+        $userId = OW::getUser()->getId();
+
 	    // count all the parts of this file
 	    $total_files_on_server_size = 0;
 	    $temp_total = 0;
@@ -240,7 +261,7 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 	    // If the Size of all the chunks on the server is equal to the size of the file uploaded.
 	    if ($total_files_on_server_size >= $totalSize) {
 	    // create the final destination file 
-	        if (($fp = fopen($path.'temp/'.$fileName, 'w')) !== false) {
+	        if (($fp = fopen($path.'temp/'.$userId.'/'.$fileName, 'w')) !== false) {
 	            for ($i=1; $i<=$total_files; $i++) {
 	                fwrite($fp, file_get_contents($temp_dir.'/'.$fileName.'.part'.$i));
 	                $this->_log('writing chunk '.$i);
