@@ -42,7 +42,7 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			r.assignBrowse(document.getElementById('fileupload'));
 
 			r.on('fileSuccess', function(file){
-			    var str = '<tr><td align=\"center\" ><input class=\"buttonradio\" name=\"main\" value=\"'+ file.fileName +'\" type=\"radio\"></td><td align=\"center\" >'+ file.fileName +'</td><td align=\"center\" ><a class=\"delete_file\"><div class=\"ow_ic_delete\"></div></a></td></tr>'
+			    var str = '<tr><td align=\"center\" ><input class=\"buttonradio\" name=\"main\" value=\"'+ file.fileName +'\" type=\"radio\"></td><td align=\"center\" >'+ file.fileName +'</td><td align=\"center\" ><a class=\"delete_file\"><div class=\"ow_ic_delete\"></div></a><input type=\"hidden\" name=\"fileAdd\" value=\"'+file.fileName+'!^0^!'+file.size+'!^0^!Add'+'\" ></td></tr>'
 			    $('#Listfile tbody').append( str );
 			    $('#file_btn_browse').removeClass('ow_disable');
 			    $('#file_btn_browse').removeAttr('disabled');
@@ -110,14 +110,14 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			t.assignBrowse(document.getElementById('thumbsUpload'));
 
 			t.on('fileSuccess', function(file){
-				console.log(file);
 				var imgThumb = pathTemp + file.fileName;
-				console.log(imgThumb);
-				$('#'+file.uniqueIdentifier).attr('src', imgThumb);
+				$('.'+file.uniqueIdentifier).attr('src', imgThumb);
+				var str1 = '<input class=\"'+file.uniqueIdentifier+'\" type=\"hidden\" name=\"thumbs[]\" value=\"'+file.fileName+'!^0^!'+file.size+'!^0^!Add\" />';
+				$('#listthumb').append(str1);
 
 			  });
 			t.on('fileAdded', function(file, event){
-				var str = '<div class=\"divThumb ow_left\"><img width=\"100%\" id=\"'+file.uniqueIdentifier+'\" src=\"$loadimage\" /></div>';
+				var str = '<div class=\"divThumb ow_left\"><img width=\"100%\" class=\"'+file.uniqueIdentifier+'\" src=\"$loadimage\" /></div>';
 				$('#listthumb').append(str);
 				t.upload();
 			  });
@@ -149,6 +149,8 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 		$check = false;
 		$this->assign("check", $check);
 
+
+
 	}
 
 	public function uploadFile() 
@@ -159,7 +161,6 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
             'upload_dir' => $uploadPath,
             'max_file_size' => '500000000'
         ));
-        var_dump($upload_handler);die();
     }
 
 	public function resumable()
