@@ -44,12 +44,15 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			r.on('fileSuccess', function(file){
 			    var str = '<tr><td align=\"center\" ><input class=\"buttonradio\" name=\"main\" value=\"'+ file.fileName +'\" type=\"radio\"></td><td align=\"center\" >'+ file.fileName +'</td><td align=\"center\" ><a class=\"delete_file\"><div class=\"ow_ic_delete\"></div></a></td></tr>'
 			    $('#Listfile tbody').append( str );
-			    console.log(file);
+			    $('#file_btn_browse').removeClass('ow_disable');
+			    $('#file_btn_browse').removeAttr('disabled');
 			  });
 			r.on('fileAdded', function(file, event){
 			    r.upload();
 			    var str = '<tr id=\"file_progress\"><td colspan=\"2\"><div class=\"sp-progress-container sp-round-xlarge\"><div class=\"sp-progressbar sp-round-xlarge\" ></div></div></td><td align=\"center\" ><a class=\"deleteFileProgress\"><div class=\"ow_ic_delete\"></div></a></td></tr>';
 			    $('#Listfile tbody').append( str );
+			    $('#file_btn_browse').addClass('ow_disable');
+			    $('#file_btn_browse').attr('disabled','disabled');
 			    total = file.chunks.length;
 			  });
 			r.on('filesAdded', function(array){
@@ -70,7 +73,8 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			  });
 			r.on('cancel', function(){
 				$('#file_progress').remove();
-				
+				$('#file_btn_browse').removeClass('ow_disable');
+			    $('#file_btn_browse').removeAttr('disabled');
 			  });
 
 			var i = new Resumable({
@@ -106,11 +110,15 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			t.assignBrowse(document.getElementById('thumbsUpload'));
 
 			t.on('fileSuccess', function(file){
+				console.log(file);
 				var imgThumb = pathTemp + file.fileName;
-				$('#imgThumb').attr('src', imgThumb);
+				console.log(imgThumb);
+				$('#'+file.uniqueIdentifier).attr('src', imgThumb);
+
 			  });
 			t.on('fileAdded', function(file, event){
-				var str = '<div class=\".divThumb ow_left\"><img class=\"imgThumb\" src=\"$loadimage\"/>					</div>'
+				var str = '<div class=\"divThumb ow_left\"><img width=\"100%\" id=\"'+file.uniqueIdentifier+'\" src=\"$loadimage\" /></div>';
+				$('#listthumb').append(str);
 				t.upload();
 			  });
 			t.on('fileRetry', function(file){

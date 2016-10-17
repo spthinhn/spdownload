@@ -28,7 +28,7 @@
 .clickImg:hover {
 	cursor: pointer;
 }
-#file_btn_thumb, .divThumb {
+#file_btn_thumb {
     width: 125px;
     height: 122px;
     overflow: hidden;
@@ -47,4 +47,19 @@
     margin-top: -26px;
     margin-right: 30px;
     pointer-events: none;
+}
+
+.divThumb {
+	max-height: 128px;
+	max-width: 128px;
+	
+    margin: 5px;
+}
+
+.ow_disable {
+	background-color: #a94442;
+	background-image: none;
+}
+.ow_disable:hover {
+	cursor: not-allowed;
 }
