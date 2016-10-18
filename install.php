@@ -8,7 +8,7 @@ $sql = "CREATE TABLE `" . OW_DB_PREFIX . "spdownload_category` (
 )
 ENGINE=MyISAM
 ROW_FORMAT=DEFAULT";
-//installing database
+
 OW::getDbo()->query($sql);
 
 BOL_LanguageService::getInstance()->addPrefix('spdownload', 'Simple Download');

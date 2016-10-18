@@ -42,7 +42,7 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			r.assignBrowse(document.getElementById('fileupload'));
 
 			r.on('fileSuccess', function(file){
-			    var str = '<tr><td align=\"center\" ><input class=\"buttonradio\" name=\"main\" value=\"'+ file.fileName +'\" type=\"radio\"></td><td align=\"center\" >'+ file.fileName +'</td><td align=\"center\" ><a class=\"delete_file\"><div class=\"ow_ic_delete\"></div></a><input type=\"hidden\" name=\"fileAdd\" value=\"'+file.fileName+'!^0^!'+file.size+'!^0^!Add'+'\" ></td></tr>'
+			    var str = '<tr><td align=\"center\" ><input class=\"buttonradio\" name=\"main\" value=\"'+ file.fileName +'\" type=\"radio\"></td><td align=\"center\" >'+ file.fileName +'</td><td align=\"center\" ><a class=\"delete_file\"><div class=\"ow_ic_delete\"></div></a><input type=\"hidden\" name=\"filesPost[]\" value=\"'+file.fileName+'!^0^!'+file.size+'!^0^!Add'+'\" ></td></tr>'
 			    $('#Listfile tbody').append( str );
 			    $('#file_btn_browse').removeClass('ow_disable');
 			    $('#file_btn_browse').removeAttr('disabled');
@@ -87,6 +87,8 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 			i.on('fileSuccess', function(file){
 				var imgIcon = pathTemp + file.fileName;
 				$('#imgIcon').attr('src', imgIcon);
+				var str = '<input type=\"hidden\" name=\"iconPost[]\" value=\"'+file.fileName+'!^0^!'+file.size+'!^0^!Add\" />';
+				$('#imgIcon').parent().parent().append(str);
 			  });
 			i.on('fileAdded', function(file, event){
 				i.upload();
@@ -149,6 +151,9 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 		$check = false;
 		$this->assign("check", $check);
 
+		if ( OW::getRequest()->isPost() ) {
+			var_dump($_POST);die();
+		}
 
 
 	}
