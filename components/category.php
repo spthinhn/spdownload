@@ -5,7 +5,14 @@ class SPDOWNLOAD_CMP_Category extends OW_Component
 	{
 		parent::__construct();
 		$categories = $this->listcategory();
+		$actual_link = "http" . (($_SERVER['SERVER_PORT'] == 443) ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$url = OW::getRouter()->urlForRoute('spdownload.upload_index');
+		$checkCate = false;
+		if ($actual_link == $url) {
+			$checkCate = true;
+		}
 		$this->assign("categories", $categories);
+		$this->assign("checkCate", $checkCate);
 	}
 
 	private function listcategory($parent=0, $level=0, $listArr=array())

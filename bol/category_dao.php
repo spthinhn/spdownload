@@ -26,7 +26,7 @@ class SPDOWNLOAD_BOL_CategoryDao extends OW_BaseDao
 
     public function getTableName()
     {
-        return OW_DB_PREFIX . 'spdownload_category';
+        return OW_DB_PREFIX . 'spdownload_categories';
     }
 
     public function getCategoryListByParent($parent)
@@ -35,6 +35,16 @@ class SPDOWNLOAD_BOL_CategoryDao extends OW_BaseDao
         $example->andFieldEqual('parent', $parent);
 
         return $this->findListByExample($example);
+    }
+
+    public function getCategoryListNotInId( $idNotIn )
+    {
+        $select = '*';
+        $from   = $this->getTableName();
+        $where  = '`id` NOT IN ('.$idNotIn.')';
+        $query  = "SELECT $select FROM $from WHERE $where ";
+
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName());
     }
 
 }

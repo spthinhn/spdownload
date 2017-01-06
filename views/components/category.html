@@ -2,10 +2,17 @@
 {block_decorator name='box' addClass='ow_stdmargin' langLabel = 'spdownload+category' iconClass='ow_ic_star'}
 <ul id="category">
 	{foreach from=$categories item='category' name='category'}
-	<li class="level_parent_{$category->level}" >
-		<label><input class="radioCheck" type="radio" name="ct2[]" value="{$category->id}/{$category->name}" />{$category->name}</label>
-	</li>
+		{if $checkCate }
+			<li class="level_parent_{$category->level}" >
+				<label><input class="checkboxCheck" type="checkbox" name="ct2[]" value="{$category->id}/{$category->name}" />{$category->name}</label>
+			</li>
+		{else}
+			<li class="level_parent_{$category->level}" >
+				<label><input class="radioCheck" type="radio" name="ct2[]" value="{$category->id}/{$category->name}" />{$category->name}</label>
+			</li>
+		{/if}
 	{/foreach}
+	
 </ul>
 {/block_decorator}
 

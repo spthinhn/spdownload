@@ -19,9 +19,14 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 			}
 		}
 		$this->assign("check", $check);
-
-		$form = new spdownloadForm();
+		if (isset($requests["id"])) {
+			$form = new spdownloadForm($requests["id"]);
+		} else {
+			$form = new spdownloadForm();
+		}
+		
 		if ($check) {
+			
 			$var = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($requests["id"]);
 			$form->setValues(array(
 				"nameCategory" => $var->name,
@@ -101,11 +106,15 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 
 class spdownloadForm extends Form
 {
-	public function __construct()
+	public function __construct($idNotIn = null)
 	{
 		parent::__construct("form_category_add");
 		$language = OW::getLanguage();
-		$listCategory = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryList();
+		if ($idNotIn) {
+			$listCategory = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryListNotInId($idNotIn);
+		} else {
+			$listCategory = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryList();
+		}
 
 		$nameField = new TextField("nameCategory");
 		$nameField->setRequired(true);

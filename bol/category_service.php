@@ -62,4 +62,10 @@ class SPDOWNLOAD_BOL_CategoryService
     {
     	return SPDOWNLOAD_BOL_CategoryDao::getInstance()->findById($id);	
     }
+
+    public function getCategoryListNotInId( $idNotIn )
+    {
+        return SPDOWNLOAD_BOL_CategoryDao::getInstance()->getCategoryListNotInId($idNotIn);
+    }
+
 }

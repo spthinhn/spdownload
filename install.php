@@ -1,9 +1,10 @@
 <?php
 
-$sql = "CREATE TABLE `" . OW_DB_PREFIX . "spdownload_category` (
+$sql = "CREATE TABLE `" . OW_DB_PREFIX . "spdownload_categories` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(200) NOT NULL,
 	`parent` INT(11) NOT NULL DEFAULT '0',
+	`thumbnail` TEXT,
 	PRIMARY KEY (`id`)
 )
 ENGINE=MyISAM
