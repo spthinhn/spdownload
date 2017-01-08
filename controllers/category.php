@@ -11,8 +11,13 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 
 		OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('spdownload')->getStaticJsUrl() . 'custom.js');
 
+		
+
 		$check = false;
 		if (!empty($requests)) {
+			$action = new SPDOWNLOAD_CTRL_Action();
+			$requests = $action->check($requests);
+			
 			$check = $this->checkRequest($requests);
 			if (!$check) {
 				$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
@@ -91,6 +96,8 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 
 	private function checkRequest($requests)
 	{
+		$action = new SPDOWNLOAD_CTRL_Action();
+		$requests = $action->check($requests);
 		$flag = false;
 		if (isset($requests["id"]) && isset($requests["name"])) {
 			$id = $requests["id"];

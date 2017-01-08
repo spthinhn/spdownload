@@ -4,11 +4,11 @@
 	{foreach from=$categories item='category' name='category'}
 		{if $checkCate }
 			<li class="level_parent_{$category->level}" >
-				<label><input class="checkboxCheck" type="checkbox" name="ct2[]" value="{$category->id}/{$category->name}" />{$category->name}</label>
+				<label><input class="checkboxCheck" type="checkbox" name="ct2[]" value="{$category->id}-{$category->name}" />{$category->name}</label>
 			</li>
 		{else}
 			<li class="level_parent_{$category->level}" >
-				<label><input class="radioCheck" type="radio" name="ct2[]" value="{$category->id}/{$category->name}" />{$category->name}</label>
+				<label><input class="radioCheck" type="radio" name="ct2[]" value="{$category->id}-{$category->name}" />{$category->name}</label>
 			</li>
 		{/if}
 	{/foreach}
