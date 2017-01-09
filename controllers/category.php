@@ -4,34 +4,32 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 {
 	public function index($requests = null)
 	{
-		$this->setPageTitle(OW::getLanguage()->text("spdownload", "title_category_add"));
-		$this->setPageHeading(OW::getLanguage()->text("spdownload", "head_category_add"));
+		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titleCategoryAdd"));
+		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headCategoryAdd"));
 
 		OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('spdownload')->getStaticCssUrl() . 'style.css');
 
 		OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('spdownload')->getStaticJsUrl() . 'custom.js');
 
-		
-
-		$check = false;
+		$flag = false;
 		if (!empty($requests)) {
 			$action = new SPDOWNLOAD_CTRL_Action();
 			$requests = $action->check($requests);
-			
-			$check = $this->checkRequest($requests);
-			if (!$check) {
+			$flag = $action->checkRequestCategory($requests);
+
+			if (!$flag) {
 				$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
 			}
 		}
-		$this->assign("check", $check);
+		$this->assign("flag", $flag);
+
 		if (isset($requests["id"])) {
 			$form = new spdownloadForm($requests["id"]);
 		} else {
 			$form = new spdownloadForm();
 		}
 		
-		if ($check) {
-			
+		if ($flag) {
 			$var = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($requests["id"]);
 			$form->setValues(array(
 				"nameCategory" => $var->name,
@@ -39,7 +37,6 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 			));	
 		}
 		$this->addForm($form);
-
 
 		$categories = $this->listcategory();
 		$this->assign("categories", $categories);
@@ -53,7 +50,7 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
             {
             	$data = array();
             	$data["id"] = null;
-            	if ($check) {
+            	if ($flag) {
 					$var = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($requests["id"]);
 					$data["id"] = $var->id;
 				} 
@@ -62,7 +59,6 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
             		$_POST["parentCategory"] = 0;
             	}
             	$data["parent"] = $_POST["parentCategory"];
-
             	$this->addCategory($data);
 
             	$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
@@ -78,12 +74,15 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
         }
 	}
 
-	public function updateCategory($requests)
+	public function deleteCategory($data)
 	{
-
+		if ( OW::getRequest()->isPost() )
+        {
+        	SPDOWNLOAD_BOL_CategoryService::getInstance()->addCategory($data);
+        }
 	}
 
-	private function listcategory($parent=0, $level=0, $listArr=array())
+	private function listCategory($parent=0, $level=0, $listArr=array())
 	{
 		$list = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryListByParent($parent);
 		foreach ($list as $keyList => $valList) {
@@ -94,28 +93,14 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 		return $listArr;
 	}
 
-	private function checkRequest($requests)
-	{
-		$action = new SPDOWNLOAD_CTRL_Action();
-		$requests = $action->check($requests);
-		$flag = false;
-		if (isset($requests["id"]) && isset($requests["name"])) {
-			$id = $requests["id"];
-			$name = $requests["name"];
-			$var = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($id);
-			if ($var->name == $name) {
-				$flag = true;
-			}
-		}
-		return $flag;
-	}
+	
 }
 
 class spdownloadForm extends Form
 {
 	public function __construct($idNotIn = null)
 	{
-		parent::__construct("form_category_add");
+		parent::__construct("formCategoryAdd");
 		$language = OW::getLanguage();
 		if ($idNotIn) {
 			$listCategory = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryListNotInId($idNotIn);
@@ -125,16 +110,16 @@ class spdownloadForm extends Form
 
 		$nameField = new TextField("nameCategory");
 		$nameField->setRequired(true);
-		$this->addElement($nameField->setLabel($language->text("spdownload", "form_cate_label_name")));
+		$this->addElement($nameField->setLabel($language->text("spdownload", "formCategoryLabelName")));
 
 		$parentField = new Selectbox("parentCategory");
 		foreach ($listCategory as $keyCategory => $valCategory) {
 			$parentField->addOption($valCategory->id, $valCategory->name);
 		}
-		$this->addElement($parentField->setLabel($language->text("spdownload", "form_cate_label_parent")));
+		$this->addElement($parentField->setLabel($language->text("spdownload", "formCategoryLabelParent")));
 
-		$submit = new Submit("form_category_add");
-		$submit->setValue($language->text("spdownload", "form_cate_label_submit"));
+		$submit = new Submit("formCategoryAdd");
+		$submit->setValue($language->text("spdownload", "formCategoryLabelSubmit"));
 		$this->addElement($submit);
 	}
 }

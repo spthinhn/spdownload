@@ -4,21 +4,24 @@ class SPDOWNLOAD_CTRL_Flatform extends OW_ActionController
 {
 	public function index()
 	{
-		$this->setPageTitle(OW::getLanguage()->text("spdownload", "title_category_add"));
-		$this->setPageHeading(OW::getLanguage()->text("spdownload", "head_category_add"));
+		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titleFlatformAdd"));
+		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headFlatformAdd"));
 	}
 
 	public function add()
 	{
-		$this->setPageTitle(OW::getLanguage()->text("spdownload", "title_category_add"));
-		$this->setPageHeading(OW::getLanguage()->text("spdownload", "head_category_add"));
+		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titleFlatformAdd"));
+		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headFlatformAdd"));
 
 		$document = OW::getDocument();
-
-		$document->addStyleSheet(OW::getPluginManager()->getPlugin('spdownload')->getStaticCssUrl() . 'style.css');
-		$document->addStyleSheet(OW::getPluginManager()->getPlugin('spdownload')->getStaticCssUrl() . 'custom.css');
 		$plugin = OW::getPluginManager()->getPlugin('spdownload');
 
+		/* Begin CSS */
+		$document->addStyleSheet($plugin->getStaticCssUrl() . 'style.css');
+		$document->addStyleSheet($plugin->getStaticCssUrl() . 'custom.css');
+		/* End CSS */
+
+		/* Begin JS */
 		$document->addScript($plugin->getStaticJsUrl().'jquery.ui.widget.js');
 		$document->addScript($plugin->getStaticJsUrl().'load-image.all.min.js');
 		$document->addScript($plugin->getStaticJsUrl().'canvas-to-blob.min.js');
@@ -31,12 +34,14 @@ class SPDOWNLOAD_CTRL_Flatform extends OW_ActionController
 		$document->addScript($plugin->getStaticJsUrl().'jquery.fileupload-video.js');
 		$document->addScript($plugin->getStaticJsUrl().'jquery.fileupload-validate.js');
 		$document->addScript($plugin->getStaticJsUrl().'resumable.js');
+		/* End JS */
+
 		$pathImgNone = $plugin->getStaticUrl().'img/icon_none.png';
         $this->assign("pathImgNone", $pathImgNone);
 		
 		$urlUploadHandler = OW::getRouter()->urlForRoute('spdownload.resumable');
         $path = $plugin->getUserFilesUrl();
-        $loadimage = $plugin->getStaticUrl().'img/' . 'loading.gif';
+        $loadImage = $plugin->getStaticUrl().'img/' . 'loading.gif';
         $userId = OW::getUser()->getId();
         $pathTemp = $path.'temp/'.$userId.'/';
 
@@ -67,14 +72,38 @@ class SPDOWNLOAD_CTRL_Flatform extends OW_ActionController
 			i.on('complete', function(){
 			  });
 			i.on('progress', function(){
-				$('#imgIcon').attr('src', '$loadimage');
+				$('#imgIcon').attr('src', '$loadImage');
 			  });
 
         ";
         OW::getDocument()->addOnloadScript($script);
 
-		
+		$form = new spdownloadForm();
+		$form->setEnctype(Form::ENCTYPE_MULTYPART_FORMDATA);
+
+		$this->addForm($form);
 
 	}
 
+}
+
+
+class spdownloadForm extends Form
+{
+	public function __construct()
+	{
+		parent::__construct("formUpload");
+		$language = OW::getLanguage();
+		
+		$nameField = new TextField("upName");
+		$nameField->setRequired(true);
+		$this->addElement($nameField->setLabel($language->text("spdownload", "formUpLabelName")));
+
+		$iconField = new TextField("upIcon");
+		$this->addElement($iconField->setLabel($language->text("spdownload", "formUpLabelIcon")));
+
+		$submit = new Submit("upLoad");
+		$submit->setValue($language->text("spdownload", "formUpLabelSubmit"));
+		$this->addElement($submit);
+	}
 }
