@@ -2,22 +2,22 @@
 
 class SPDOWNLOAD_CTRL_Action extends OW_ActionController
 {
-	public function check($requests = null)
+	public function convertParamsToArray($data)
 	{
-		$arr = explode("-", $requests["params"]);
-		$requests["id"] = $arr[0];
-		$requests["name"] = $arr[1];
+		$arr = explode("-", $data["params"]);
+		$data["id"] = $arr[0];
+		$data["name"] = $arr[1];
 
-		return $requests;
+		return $data;
 	}
 
-	public function checkRequestCategory($requests)
+	public function checkRequestCategory($data)
 	{
-		$requests = $this->check($requests);
+		$params = $this->convertParamsToArray($data);
 		$flag = false;
-		if (isset($requests["id"]) && isset($requests["name"])) {
-			$id = $requests["id"];
-			$name = $requests["name"];
+		if (isset($params["id"]) && isset($params["name"])) {
+			$id = $params["id"];
+			$name = $params["name"];
 			$var = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($id);
 			if ($var->name == $name) {
 				$flag = true;
@@ -25,4 +25,15 @@ class SPDOWNLOAD_CTRL_Action extends OW_ActionController
 		}
 		return $flag;
 	}
+
+	public function convertStringImageToArray($stringImage)
+	{
+		$arr = explode("!^0^!", $stringImage);
+		$data["nameImage"] = $arr[0];
+		$data["sizeImage"] = $arr[1];
+		$data["actionImage"] = $arr[2];
+
+		return $data;
+	}
+
 }

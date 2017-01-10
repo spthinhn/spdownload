@@ -84,10 +84,30 @@ class SPDOWNLOAD_CTRL_Flatform extends OW_ActionController
 
 		$this->addForm($form);
 
+		if ( OW::getRequest()->isPost() ) {
+
+			if ( $form->isValid($_POST) ) {
+            	$data = array();
+            	$data["id"] = null;
+            	$data["name"] = $_POST["upName"];
+
+            	$action = new SPDOWNLOAD_CTRL_Action();
+				$arrStringImage = $action->convertStringImageToArray($_POST["iconFlatform"]);
+
+            	if ($arrStringImage["actionImage"] == "Add") {
+            		$data["thumb"] = $arrStringImage["nameImage"];
+            	} else {
+            		$data["thumb"] = $arrStringImage["nameImage"];
+            	}
+
+            	$this->addCategory($data);
+
+            	$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
+            }
+			var_dump($_POST);die();
+		}
+
 	}
-
-	
-
 }
 
 

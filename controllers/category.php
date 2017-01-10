@@ -14,7 +14,7 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 		$flag = false;
 		if (!empty($requests)) {
 			$action = new SPDOWNLOAD_CTRL_Action();
-			$requests = $action->check($requests);
+			$requests = $action->convertParamsToArray($requests);
 			$flag = $action->checkRequestCategory($requests);
 
 			if (!$flag) {
@@ -47,10 +47,8 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 		$cmpCategory = new SPDOWNLOAD_CMP_Category();
 		$this->addComponent('cmpCategory', $cmpCategory);
 		
-		if ( OW::getRequest()->isPost() )
-        {
-            if ( $form->isValid($_POST) )
-            {
+		if (OW::getRequest()->isPost()) {
+            if ($form->isValid($_POST)) {
             	$data = array();
             	$data["id"] = null;
             	if ($flag) {
@@ -58,7 +56,7 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 					$data["id"] = $var->id;
 				} 
             	$data["name"] = $_POST["nameCategory"];
-            	if (!isset($_POST["parentCategory"]) || empty($_POST["parentCategory"]) ) {
+            	if (!isset($_POST["parentCategory"]) || empty($_POST["parentCategory"])) {
             		$_POST["parentCategory"] = 0;
             	}
             	$data["parent"] = $_POST["parentCategory"];
@@ -72,8 +70,7 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 
 	public function addCategory($data)
 	{
-		if ( OW::getRequest()->isPost() )
-        {
+		if (OW::getRequest()->isPost()) {
         	SPDOWNLOAD_BOL_CategoryService::getInstance()->addCategory($data);
         }
 	}
@@ -81,7 +78,7 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 	public function deleteCategory($requests)
 	{
 		$action = new SPDOWNLOAD_CTRL_Action();
-		$requests = $action->check($requests);
+		$requests = $action->convertParamsToArray($requests);
 		$flag = $action->checkRequestCategory($requests);
 
 		if (!$flag) {
