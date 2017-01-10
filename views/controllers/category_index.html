@@ -12,8 +12,8 @@
 <tr>
 	<td class="ow_center" {if !$flag } colspan="2" {/if}>{submit name="formCategoryAdd" class="ow_ic_save"}</td>
 	{if $flag }
-	<td>{decorator name="button" class="btn_cate_delete ow_ic_trash" langLabel='spdownload+delete' }</td>
-	<td>{decorator name="button" class="btn_cate_delete ow_ic_close" langLabel='spdownload+cancel' }</td>
+	<td>{decorator name="button" class="btn_cate_delete ow_ic_trash" langLabel="spdownload+delete" onclick="window.location.href = '`$urlDelete`'" }</td>
+	<td>{decorator name="button" class="btn_cate_delete ow_ic_close" langLabel="spdownload+cancel" onclick="window.location.href = '`$urlCancel`'" }</td>
 	{/if}
 </tr>
 </table>

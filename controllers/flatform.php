@@ -56,9 +56,10 @@ class SPDOWNLOAD_CTRL_Flatform extends OW_ActionController
 			i.assignBrowse(document.getElementById('iconUpload'));
 
 			i.on('fileSuccess', function(file){
+				$('.iconHidden').remove();
 				var imgIcon = pathTemp + file.fileName;
 				$('#imgIcon').attr('src', imgIcon);
-				var str = '<input type=\"hidden\" name=\"iconPost[]\" value=\"'+file.fileName+'!^0^!'+file.size+'!^0^!Add\" />';
+				var str = '<input class=\"iconHidden\" type=\"hidden\" name=\"iconFlatform\" value=\"'+file.fileName+'!^0^!'+file.size+'!^0^!Add\" />';
 				$('#imgIcon').parent().parent().append(str);
 			  });
 			i.on('fileAdded', function(file, event){
@@ -84,6 +85,8 @@ class SPDOWNLOAD_CTRL_Flatform extends OW_ActionController
 		$this->addForm($form);
 
 	}
+
+	
 
 }
 

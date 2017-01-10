@@ -43,6 +43,13 @@ class SPDOWNLOAD_BOL_CategoryService
         }
     }
 
+    public function deleteCategory($data)
+    {
+        $category = new SPDOWNLOAD_BOL_Category();
+        $category->id = $data["id"];
+        SPDOWNLOAD_BOL_CategoryDao::getInstance()->delete($category);
+    }
+
     private function getCategoryKey( $name )
     {
         return 'category_' . trim($name);

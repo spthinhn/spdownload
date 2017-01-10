@@ -20,6 +20,9 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 			if (!$flag) {
 				$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
 			}
+
+			$this->assign("urlDelete", OW::getRouter()->urlForRoute('spdownload.category_delete', array('params'=>$requests["params"])));
+			$this->assign("urlCancel", OW::getRouter()->urlForRoute('spdownload.category_index'));
 		}
 		$this->assign("flag", $flag);
 
@@ -59,6 +62,7 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
             		$_POST["parentCategory"] = 0;
             	}
             	$data["parent"] = $_POST["parentCategory"];
+
             	$this->addCategory($data);
 
             	$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
@@ -74,12 +78,18 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
         }
 	}
 
-	public function deleteCategory($data)
+	public function deleteCategory($requests)
 	{
-		if ( OW::getRequest()->isPost() )
-        {
-        	SPDOWNLOAD_BOL_CategoryService::getInstance()->addCategory($data);
-        }
+		$action = new SPDOWNLOAD_CTRL_Action();
+		$requests = $action->check($requests);
+		$flag = $action->checkRequestCategory($requests);
+
+		if (!$flag) {
+			$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
+		}
+
+    	SPDOWNLOAD_BOL_CategoryService::getInstance()->deleteCategory($requests);
+    	$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
 	}
 
 	private function listCategory($parent=0, $level=0, $listArr=array())

@@ -187,6 +187,7 @@ class SPDOWNLOAD_CTRL_Upload extends OW_ActionController
 		        $_GET['resumableChunkNumber']='';
 		    }
 		    $chunk_file = $temp_dir.'/'.$_GET['resumableFilename'].'.part'.$_GET['resumableChunkNumber'];
+		    var_dump($chunk_file);
 		    if (file_exists($chunk_file)) {
 		         header("HTTP/1.0 200 Ok");
 		       } else {
