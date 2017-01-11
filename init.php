@@ -10,10 +10,10 @@ OW::getRouter()->addRoute(new OW_Route('spdownload.category_delete', 'downloads/
 OW::getRouter()->addRoute(new OW_Route('spdownload.index', 'downloads', "SPDOWNLOAD_CTRL_Download", 'index'));
 /* End Download */
 
-/* Begin Flatform */
-OW::getRouter()->addRoute(new OW_Route('spdownload.flatform', 'downloads/flatform', "SPDOWNLOAD_CTRL_Flatform", 'index'));
-OW::getRouter()->addRoute(new OW_Route('spdownload.flatform_add', 'downloads/flatform/add', "SPDOWNLOAD_CTRL_Flatform", 'add'));
-/* End Flatform */
+/* Begin platform */
+OW::getRouter()->addRoute(new OW_Route('spdownload.platform', 'downloads/platform', "SPDOWNLOAD_CTRL_Platform", 'index'));
+OW::getRouter()->addRoute(new OW_Route('spdownload.platform_add', 'downloads/platform/add', "SPDOWNLOAD_CTRL_Platform", 'add'));
+/* End platform */
 
 /* Begin Upload */
 OW::getRouter()->addRoute(new OW_Route('spdownload.upload_index', 'downloads/new', "SPDOWNLOAD_CTRL_Upload", 'index'));

@@ -1,17 +1,17 @@
 <?php 
 
-class SPDOWNLOAD_CTRL_Flatform extends OW_ActionController
+class SPDOWNLOAD_CTRL_Platform extends OW_ActionController
 {
 	public function index()
 	{
-		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titleFlatformAdd"));
-		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headFlatformAdd"));
+		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titlePlatformAdd"));
+		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headPlatformAdd"));
 	}
 
 	public function add()
 	{
-		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titleFlatformAdd"));
-		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headFlatformAdd"));
+		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titlePlatformAdd"));
+		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headPlatformAdd"));
 
 		$document = OW::getDocument();
 		$plugin = OW::getPluginManager()->getPlugin('spdownload');
@@ -59,7 +59,7 @@ class SPDOWNLOAD_CTRL_Flatform extends OW_ActionController
 				$('.iconHidden').remove();
 				var imgIcon = pathTemp + file.fileName;
 				$('#imgIcon').attr('src', imgIcon);
-				var str = '<input class=\"iconHidden\" type=\"hidden\" name=\"iconFlatform\" value=\"'+file.fileName+'!^0^!'+file.size+'!^0^!Add\" />';
+				var str = '<input class=\"iconHidden\" type=\"hidden\" name=\"iconPlatform\" value=\"'+file.fileName+'!^0^!'+file.size+'!^0^!Add\" />';
 				$('#imgIcon').parent().parent().append(str);
 			  });
 			i.on('fileAdded', function(file, event){
@@ -92,7 +92,7 @@ class SPDOWNLOAD_CTRL_Flatform extends OW_ActionController
             	$data["name"] = $_POST["upName"];
 
             	$action = new SPDOWNLOAD_CTRL_Action();
-				$arrStringImage = $action->convertStringImageToArray($_POST["iconFlatform"]);
+				$arrStringImage = $action->convertStringImageToArray($_POST["iconPlatform"]);
 
             	if ($arrStringImage["actionImage"] == "Add") {
             		$data["thumb"] = $arrStringImage["nameImage"];
@@ -100,13 +100,26 @@ class SPDOWNLOAD_CTRL_Flatform extends OW_ActionController
             		$data["thumb"] = $arrStringImage["nameImage"];
             	}
 
-            	$this->addCategory($data);
+            	$pathTempDir = $plugin->getUserFilesDir();
+            	$data["from"] = $pathTempDir.'temp/'.$userId.'/';
+            	$data["to"] = $pathTempDir.$userId.'/platform/';
+            	$data["name"] = $data["thumb"];
+            	$this->moveFile($data);
+            	die();
 
-            	$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
+            	$this->redirect(OW::getRouter()->urlForRoute('spdownload.platform_index'));
             }
-			var_dump($_POST);die();
+			
 		}
 
+	}
+
+	private function moveFile($data)
+	{
+		if (!is_dir($data["to"])) {
+			mkdir($data["to"]);
+		}
+		rename($data["from"].$data["name"], $data["to"].$data["name"]);
 	}
 }
 
