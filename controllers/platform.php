@@ -6,6 +6,13 @@ class SPDOWNLOAD_CTRL_Platform extends OW_ActionController
 	{
 		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titlePlatformAdd"));
 		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headPlatformAdd"));
+
+		$document = OW::getDocument();
+		$plugin = OW::getPluginManager()->getPlugin('spdownload');
+		$pathImgNone = $plugin->getStaticUrl().'img/icon_none.png';
+        $this->assign("pathImgNone", $pathImgNone);
+        $platforms = SPDOWNLOAD_BOL_PlatformService::getInstance()->getPlatformList();
+		$this->assign("platforms", $platforms);        
 	}
 
 	public function add()
@@ -84,6 +91,8 @@ class SPDOWNLOAD_CTRL_Platform extends OW_ActionController
 
 		$this->addForm($form);
 
+		$action = new SPDOWNLOAD_CTRL_Action();
+
 		if ( OW::getRequest()->isPost() ) {
 
 			if ( $form->isValid($_POST) ) {
@@ -91,21 +100,23 @@ class SPDOWNLOAD_CTRL_Platform extends OW_ActionController
             	$data["id"] = null;
             	$data["name"] = $_POST["upName"];
 
-            	$action = new SPDOWNLOAD_CTRL_Action();
 				$arrStringImage = $action->convertStringImageToArray($_POST["iconPlatform"]);
+				$pathTempDir = $plugin->getUserFilesDir();
+        		$data["thumb"] = $arrStringImage["nameImage"];
 
+        		$arrTemp = array();
             	if ($arrStringImage["actionImage"] == "Add") {
-            		$data["thumb"] = $arrStringImage["nameImage"];
+            		$arrTemp["from"] = $pathTempDir.'temp/'.$userId.'/';
+	            	$arrTemp["to"] = $pathTempDir.$userId.'/platform/';
+	            	$arrTemp["name"] = $data["thumb"];
             	} else {
-            		$data["thumb"] = $arrStringImage["nameImage"];
+            		$pathImgDefault = $plugin->getStaticDir();
+            		$arrTemp["from"] = $pathImgDefault.'img/';
+	            	$arrTemp["to"] = $pathTempDir.$userId.'/platform/';
+	            	$arrTemp["name"] = $data["thumb"];
             	}
-
-            	$pathTempDir = $plugin->getUserFilesDir();
-            	$data["from"] = $pathTempDir.'temp/'.$userId.'/';
-            	$data["to"] = $pathTempDir.$userId.'/platform/';
-            	$data["name"] = $data["thumb"];
-            	$this->moveFile($data);
-            	die();
+            	$action->copyFile($arrTemp);
+            	SPDOWNLOAD_BOL_PlatformService::getInstance()->addPlatform($data);
 
             	$this->redirect(OW::getRouter()->urlForRoute('spdownload.platform_index'));
             }
@@ -114,13 +125,6 @@ class SPDOWNLOAD_CTRL_Platform extends OW_ActionController
 
 	}
 
-	private function moveFile($data)
-	{
-		if (!is_dir($data["to"])) {
-			mkdir($data["to"]);
-		}
-		rename($data["from"].$data["name"], $data["to"].$data["name"]);
-	}
 }
 
 

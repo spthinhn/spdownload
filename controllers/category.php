@@ -68,7 +68,7 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
         }
 	}
 
-	public function addCategory($data)
+	private function addCategory($data)
 	{
 		if (OW::getRequest()->isPost()) {
         	SPDOWNLOAD_BOL_CategoryService::getInstance()->addCategory($data);

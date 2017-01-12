@@ -36,4 +36,12 @@ class SPDOWNLOAD_CTRL_Action extends OW_ActionController
 		return $data;
 	}
 
+	public function copyFile($data)
+	{
+		if (!is_dir($data["to"])) {
+			mkdir($data["to"]);
+		}
+		copy($data["from"].$data["name"], $data["to"].$data["name"]);
+	}
+
 }

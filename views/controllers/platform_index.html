@@ -1,1 +1,25 @@
-flatform_index.html
+<div class="ow_wide ow_automargin ow_center">
+	<table class="ow_table_1">
+		<tr>
+			<th width="5%">STT</th>
+			<th width="15%">Image</th>
+			<th width="50%">Name</th>
+			<th></th>
+		</tr>
+
+			{capture}
+				{$i = 1}
+			{/capture}
+		{foreach from=$platforms item='platform' name='platform'}
+		<tr>
+			<td>{$i}</td>
+			<td><img src="{$pathImgNone}" width="100%"></td>
+			<td></td>
+			<td></td>
+		</tr>
+			{capture}
+				{$i++}
+			{/capture}
+		{/foreach}
+	</table>
+</div>
