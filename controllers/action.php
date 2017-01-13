@@ -44,4 +44,18 @@ class SPDOWNLOAD_CTRL_Action extends OW_ActionController
 		copy($data["from"].$data["name"], $data["to"].$data["name"]);
 	}
 
+	public function setPathFile()
+	{
+		$document = OW::getDocument();
+		$plugin = OW::getPluginManager()->getPlugin('spdownload');
+		$urlUserFiles = $plugin->getUserFilesUrl();
+		$dirUserFiles = $plugin->getUserFilesDir();
+
+		$path["url"]["platform"] = $urlUserFiles.'platform/';
+		$path["url"]["temp"] = $urlUserFiles.'temp/';
+
+		$path["dir"]["platform"] = $dirUserFiles.'platform/';
+		$path["dir"]["temp"] = $dirUserFiles.'temp/';
+
+	}
 }

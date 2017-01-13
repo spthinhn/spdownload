@@ -3,7 +3,7 @@
 		<tr>
 			<th width="5%">STT</th>
 			<th width="15%">Image</th>
-			<th width="50%">Name</th>
+			<th width="40%">Name</th>
 			<th></th>
 		</tr>
 
@@ -13,9 +13,10 @@
 		{foreach from=$platforms item='platform' name='platform'}
 		<tr>
 			<td>{$i}</td>
-			<td><img src="{$pathImgNone}" width="100%"></td>
-			<td></td>
-			<td></td>
+			<td><img src="{$urlUserFilesPlatform}{$platform->thumb}" width="100%"></td>
+			<td>{$platform->name}</td>
+			<td>{decorator name="button" class="ow_ic_edit" langLabel="spdownload+edit" onclick="window.location.href = ''" }
+			{decorator name="button" class="ow_ic_trash" langLabel="spdownload+delete" onclick="window.location.href = ''" }</td>
 		</tr>
 			{capture}
 				{$i++}

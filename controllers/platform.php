@@ -4,18 +4,20 @@ class SPDOWNLOAD_CTRL_Platform extends OW_ActionController
 {
 	public function index()
 	{
-		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titlePlatformAdd"));
-		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headPlatformAdd"));
+		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titlePlatform"));
+		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headPlatform"));
 
 		$document = OW::getDocument();
 		$plugin = OW::getPluginManager()->getPlugin('spdownload');
-		$pathImgNone = $plugin->getStaticUrl().'img/icon_none.png';
-        $this->assign("pathImgNone", $pathImgNone);
+
+		$this->assign("urlUserFilesPlatform", $plugin->getUserFilesUrl().'platforms/');
+        $this->assign("pathImgNone", $plugin->getStaticUrl().'img/icon_none.png');
+
         $platforms = SPDOWNLOAD_BOL_PlatformService::getInstance()->getPlatformList();
 		$this->assign("platforms", $platforms);        
 	}
 
-	public function add()
+	public function add($params = null)
 	{
 		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titlePlatformAdd"));
 		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headPlatformAdd"));
@@ -98,6 +100,10 @@ class SPDOWNLOAD_CTRL_Platform extends OW_ActionController
 			if ( $form->isValid($_POST) ) {
             	$data = array();
             	$data["id"] = null;
+            	if (isset($params)) {
+            		
+            	}
+            	
             	$data["name"] = $_POST["upName"];
 
 				$arrStringImage = $action->convertStringImageToArray($_POST["iconPlatform"]);
@@ -107,12 +113,12 @@ class SPDOWNLOAD_CTRL_Platform extends OW_ActionController
         		$arrTemp = array();
             	if ($arrStringImage["actionImage"] == "Add") {
             		$arrTemp["from"] = $pathTempDir.'temp/'.$userId.'/';
-	            	$arrTemp["to"] = $pathTempDir.$userId.'/platform/';
+	            	$arrTemp["to"] = $pathTempDir.'platforms/';
 	            	$arrTemp["name"] = $data["thumb"];
             	} else {
             		$pathImgDefault = $plugin->getStaticDir();
             		$arrTemp["from"] = $pathImgDefault.'img/';
-	            	$arrTemp["to"] = $pathTempDir.$userId.'/platform/';
+	            	$arrTemp["to"] = $pathTempDir.'platforms/';
 	            	$arrTemp["name"] = $data["thumb"];
             	}
             	$action->copyFile($arrTemp);

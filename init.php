@@ -13,6 +13,7 @@ OW::getRouter()->addRoute(new OW_Route('spdownload.index', 'downloads', "SPDOWNL
 /* Begin platform */
 OW::getRouter()->addRoute(new OW_Route('spdownload.platform_index', 'downloads/platform', "SPDOWNLOAD_CTRL_Platform", 'index'));
 OW::getRouter()->addRoute(new OW_Route('spdownload.platform_add', 'downloads/platform/add', "SPDOWNLOAD_CTRL_Platform", 'add'));
+OW::getRouter()->addRoute(new OW_Route('spdownload.platform_edit', 'downloads/platform/add/:params', "SPDOWNLOAD_CTRL_Platform", 'add'));
 /* End platform */
 
 /* Begin Upload */
