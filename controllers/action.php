@@ -2,24 +2,32 @@
 
 class SPDOWNLOAD_CTRL_Action extends OW_ActionController
 {
-	public function convertParamsToArray($data)
+	public function explodeParams($data)
 	{
 		$arr = explode("-", $data["params"]);
 		$data["id"] = $arr[0];
-		$data["name"] = $arr[1];
 
 		return $data;
 	}
 
-	public function checkRequestCategory($data)
+	public function checkRequest($data, $table)
 	{
-		$params = $this->convertParamsToArray($data);
+		$data = $this->explodeParams($data);
 		$flag = false;
-		if (isset($params["id"]) && isset($params["name"])) {
-			$id = $params["id"];
-			$name = $params["name"];
-			$var = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($id);
-			if ($var->name == $name) {
+		if (isset($data["id"])) {
+			switch ($table) {
+				case 'category':
+					$object = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($data["id"]);
+					break;
+				case 'platform':
+					$object = SPDOWNLOAD_BOL_PlatformService::getInstance()->getPlatformById($data["id"]);
+					break;
+				default:
+					$flag = false;
+					break;
+			}
+			$urlTemp = $object->id.'-'.$object->slug;
+			if ($urlTemp == urldecode($data["params"])) {
 				$flag = true;
 			}
 		}

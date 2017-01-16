@@ -15,8 +15,8 @@
 			<td>{$i}</td>
 			<td><img src="{$urlUserFilesPlatform}{$platform->thumb}" width="100%"></td>
 			<td>{$platform->name}</td>
-			<td>{decorator name="button" class="ow_ic_edit" langLabel="spdownload+edit" onclick="window.location.href = ''" }
-			{decorator name="button" class="ow_ic_trash" langLabel="spdownload+delete" onclick="window.location.href = ''" }</td>
+			<td>{decorator name="button" class="ow_ic_edit" langLabel="spdownload+edit" onclick="window.location.href = '`$platform->urlEdit`'" }
+			</td>
 		</tr>
 			{capture}
 				{$i++}

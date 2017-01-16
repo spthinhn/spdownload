@@ -14,10 +14,13 @@ class SPDOWNLOAD_CTRL_Platform extends OW_ActionController
         $this->assign("pathImgNone", $plugin->getStaticUrl().'img/icon_none.png');
 
         $platforms = SPDOWNLOAD_BOL_PlatformService::getInstance()->getPlatformList();
+        foreach ($platforms as $key => $value) {
+        	$value->urlEdit = OW::getRouter()->urlForRoute('spdownload.platform_edit',array('params' => $value->id.'-'.$value->name));
+        }
 		$this->assign("platforms", $platforms);        
 	}
 
-	public function add($params = null)
+	public function add($requests = null)
 	{
 		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titlePlatformAdd"));
 		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headPlatformAdd"));
@@ -94,7 +97,26 @@ class SPDOWNLOAD_CTRL_Platform extends OW_ActionController
 		$this->addForm($form);
 
 		$action = new SPDOWNLOAD_CTRL_Action();
+		if (isset($requests['params'])) {
+			$flag = $action->checkRequestCategory($requests, "platform");
+			$form = new spdownloadForm();
+			if (isset($requests["id"])) {
+				$form = new spdownloadForm($requests["id"]);
+			}
+			
+			if ($flag) {
+				$var = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($requests["id"]);
+				$form->setValues(array(
+					"nameCategory" => $var->name,
+					"parentCategory" => $var->parent
+				));	
+			} else {
+				$this->redirect(OW::getRouter()->urlForRoute('spdownload.platform_index'));
+			}
 
+			$this->addForm($form);
+			
+		}
 		if ( OW::getRequest()->isPost() ) {
 
 			if ( $form->isValid($_POST) ) {
@@ -125,12 +147,11 @@ class SPDOWNLOAD_CTRL_Platform extends OW_ActionController
             	SPDOWNLOAD_BOL_PlatformService::getInstance()->addPlatform($data);
 
             	$this->redirect(OW::getRouter()->urlForRoute('spdownload.platform_index'));
-            }
-			
+            }			
 		}
 
-	}
 
+	}
 }
 
 

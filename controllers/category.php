@@ -4,88 +4,102 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 {
 	public function index($requests = null)
 	{
-		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titleCategoryAdd"));
-		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headCategoryAdd"));
+		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titleCategory"));
+		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headCategory"));
 
 		OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('spdownload')->getStaticCssUrl() . 'style.css');
 
 		OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('spdownload')->getStaticJsUrl() . 'custom.js');
 
-		$flag = false;
-		if (!empty($requests)) {
-			$action = new SPDOWNLOAD_CTRL_Action();
-			$requests = $action->convertParamsToArray($requests);
-			$flag = $action->checkRequestCategory($requests);
+		$this->assign("urlAddCategory", OW::getRouter()->urlForRoute('spdownload.category_add'));
 
-			if (!$flag) {
-				$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
+		$categories = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryList();
+		foreach ($categories as $key => $value) {
+			if ($value->parent == 0) {
+				$value->parent = "";
+			} else {
+				$category = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($value->parent);
+				$value->parent = $category->name;
 			}
-
-			$this->assign("urlDelete", OW::getRouter()->urlForRoute('spdownload.category_delete', array('params'=>$requests["params"])));
-			$this->assign("urlCancel", OW::getRouter()->urlForRoute('spdownload.category_index'));
+			$tempSlug = $value->id."-".$value->slug;
+			$value->edit = OW::getRouter()->urlForRoute('spdownload.category_edit', array('params'=> $tempSlug));
 		}
-		$this->assign("flag", $flag);
-
-		if (isset($requests["id"])) {
-			$form = new spdownloadForm($requests["id"]);
-		} else {
-			$form = new spdownloadForm();
-		}
-		
-		if ($flag) {
-			$var = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($requests["id"]);
-			$form->setValues(array(
-				"nameCategory" => $var->name,
-				"parentCategory" => $var->parent
-			));	
-		}
-		$this->addForm($form);
-
-		$categories = $this->listcategory();
 		$this->assign("categories", $categories);
 
-		$cmpCategory = new SPDOWNLOAD_CMP_Category();
-		$this->addComponent('cmpCategory', $cmpCategory);
 		
+	}
+
+	public function add()
+	{
+		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titleCategoryAdd"));
+		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headCategoryAdd"));
+
+		$form = new spdownloadForm("formCategoryAdd");
+		$this->addForm($form);
+
 		if (OW::getRequest()->isPost()) {
             if ($form->isValid($_POST)) {
-            	$data = array();
             	$data["id"] = null;
-            	if ($flag) {
-					$var = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($requests["id"]);
-					$data["id"] = $var->id;
-				} 
+            	$data["slug"] = $_POST["slugCategory"];
             	$data["name"] = $_POST["nameCategory"];
             	if (!isset($_POST["parentCategory"]) || empty($_POST["parentCategory"])) {
             		$_POST["parentCategory"] = 0;
             	}
             	$data["parent"] = $_POST["parentCategory"];
-
-            	$this->addCategory($data);
-
+            	SPDOWNLOAD_BOL_CategoryService::getInstance()->addCategory($data);
             	$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
             }
         }
 	}
 
-	private function addCategory($data)
+	public function edit($data)
 	{
-		if (OW::getRequest()->isPost()) {
-        	SPDOWNLOAD_BOL_CategoryService::getInstance()->addCategory($data);
-        }
-	}
+		$this->setPageTitle(OW::getLanguage()->text("spdownload", "titleCategoryEdit"));
+		$this->setPageHeading(OW::getLanguage()->text("spdownload", "headCategoryEdit"));
 
-	public function deleteCategory($requests)
-	{
 		$action = new SPDOWNLOAD_CTRL_Action();
-		$requests = $action->convertParamsToArray($requests);
-		$flag = $action->checkRequestCategory($requests);
+		$data = $action->explodeParams($data);
+		$flag = $action->checkRequest($data, "category");
 
 		if (!$flag) {
 			$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
 		}
 
-    	SPDOWNLOAD_BOL_CategoryService::getInstance()->deleteCategory($requests);
+		$form = new spdownloadForm("formCategoryEdit", $data["id"]);
+		$getValCategory = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryById($data["id"]);
+		$form->setValues(array(
+			"nameCategory" => $getValCategory->name,
+			"slugCategory" => $getValCategory->slug,
+			"parentCategory" => $getValCategory->parent
+		));
+		$this->addForm($form);
+
+		$tempSlug = $getValCategory->id."-".$getValCategory->slug;
+		$this->assign("urlDeleteCategory", OW::getRouter()->urlForRoute('spdownload.category_delete', array('params'=> $tempSlug)));
+		$this->assign("urlCancelCategory", OW::getRouter()->urlForRoute('spdownload.category_index'));
+		
+		if (OW::getRequest()->isPost()) {
+        	$data["slug"] = $_POST["slugCategory"];
+        	$data["name"] = $_POST["nameCategory"];
+        	if (!isset($_POST["parentCategory"]) || empty($_POST["parentCategory"])) {
+        		$_POST["parentCategory"] = 0;
+        	}
+        	$data["parent"] = $_POST["parentCategory"];
+        	SPDOWNLOAD_BOL_CategoryService::getInstance()->addCategory($data);
+        	$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
+        }
+	}
+
+	public function delete($data)
+	{
+		$action = new SPDOWNLOAD_CTRL_Action();
+		$data = $action->explodeParams($data);
+		$flag = $action->checkRequest($data, "category");
+		if (!$flag) {
+			$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
+		}
+
+    	SPDOWNLOAD_BOL_CategoryService::getInstance()->deleteCategory($data);
     	$this->redirect(OW::getRouter()->urlForRoute('spdownload.category_index'));
 	}
 
@@ -105,9 +119,9 @@ class SPDOWNLOAD_CTRL_Category extends OW_ActionController
 
 class spdownloadForm extends Form
 {
-	public function __construct($idNotIn = null)
+	public function __construct($nameForm, $idNotIn = null)
 	{
-		parent::__construct("formCategoryAdd");
+		parent::__construct($nameForm);
 		$language = OW::getLanguage();
 		if ($idNotIn) {
 			$listCategory = SPDOWNLOAD_BOL_CategoryService::getInstance()->getCategoryListNotInId($idNotIn);
@@ -119,13 +133,17 @@ class spdownloadForm extends Form
 		$nameField->setRequired(true);
 		$this->addElement($nameField->setLabel($language->text("spdownload", "formCategoryLabelName")));
 
+		$slugField = new TextField("slugCategory");
+		$slugField->setRequired(true);
+		$this->addElement($slugField->setLabel($language->text("spdownload", "formCategoryLabelSlug")));
+
 		$parentField = new Selectbox("parentCategory");
 		foreach ($listCategory as $keyCategory => $valCategory) {
 			$parentField->addOption($valCategory->id, $valCategory->name);
 		}
 		$this->addElement($parentField->setLabel($language->text("spdownload", "formCategoryLabelParent")));
 
-		$submit = new Submit("formCategoryAdd");
+		$submit = new Submit($nameForm);
 		$submit->setValue($language->text("spdownload", "formCategoryLabelSubmit"));
 		$this->addElement($submit);
 	}

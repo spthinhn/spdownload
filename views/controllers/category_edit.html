@@ -1,0 +1,30 @@
+<div class="ow_narrow ow_right">
+	{decorator name="button" class="ow_ic_delete" langLabel="spdownload+delete" onclick="window.location.href = '`$urlDeleteCategory`'" }
+	{decorator name="button" class="ow_ic_cancel" langLabel="spdownload+cancel" onclick="window.location.href = '`$urlCancelCategory`'" }
+</div>
+<div class="clearfix"></div>
+<hr>
+<div class="ow_wide ow_automargin ow_center">
+	{form name="formCategoryEdit" }
+		<table class="ow_table_1 ow_form ">
+			<tr class="ow_alt1">
+				<td class="ow_value">{label name="nameCategory" }</td>
+				<td class="ow_value">{input name="nameCategory" }</td>
+			</tr>
+			<tr class="ow_alt1">
+				<td class="ow_value">{label name="slugCategory" }</td>
+				<td class="ow_value">{input name="slugCategory" }</td>
+			</tr>
+			<tr class="ow_alt1">
+				<td class="ow_value">{label name="parentCategory" }</td>
+				<td class="ow_value">{input name="parentCategory" style="width:100%"}</td>
+			</tr>
+			<tr>
+				<td class="ow_center" colspan="2">
+					{submit name="formCategoryEdit" class="ow_ic_save"}
+					
+				</td>
+			</tr>
+		</table>
+	{/form}
+</div>

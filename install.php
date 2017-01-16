@@ -3,6 +3,7 @@
 $sql = "CREATE TABLE `". OW_DB_PREFIX ."spdownload_categories` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(255) NOT NULL,
+	`slug` VARCHAR(255) NOT NULL,
 	`parent` INT(11) NOT NULL DEFAULT '0',
 	`thumb` VARCHAR(255),
 	PRIMARY KEY (`id`)
@@ -67,7 +68,8 @@ OW::getDbo()->query($sql);
 
 $sql = "CREATE TABLE `". OW_DB_PREFIX ."spdownload_platforms` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(255),
+	`name` VARCHAR(255) NOT NULL,
+	`slug` VARCHAR(255) NOT NULL,
 	`thumb` VARCHAR(255),
 
 	PRIMARY KEY (`id`)

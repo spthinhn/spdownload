@@ -2,8 +2,9 @@
 
 /* Begin Category */
 OW::getRouter()->addRoute(new OW_Route('spdownload.category_index', 'downloads/category', "SPDOWNLOAD_CTRL_Category", 'index'));
-OW::getRouter()->addRoute(new OW_Route('spdownload.category_update', 'downloads/category/:params', "SPDOWNLOAD_CTRL_Category", 'index'));
-OW::getRouter()->addRoute(new OW_Route('spdownload.category_delete', 'downloads/category/delete/:params', "SPDOWNLOAD_CTRL_Category", 'deleteCategory'));
+OW::getRouter()->addRoute(new OW_Route('spdownload.category_add', 'downloads/category/add', "SPDOWNLOAD_CTRL_Category", 'add'));
+OW::getRouter()->addRoute(new OW_Route('spdownload.category_edit', 'downloads/category/edit/:params', "SPDOWNLOAD_CTRL_Category", 'edit'));
+OW::getRouter()->addRoute(new OW_Route('spdownload.category_delete', 'downloads/category/delete/:params', "SPDOWNLOAD_CTRL_Category", 'delete'));
 /* End Category */
 
 /* Begin Download */

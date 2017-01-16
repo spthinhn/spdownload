@@ -27,8 +27,12 @@ class SPDOWNLOAD_BOL_CategoryService
     public function addCategory($data)
     {
     	$category = new SPDOWNLOAD_BOL_Category();
+        if (!isset($data["id"])) {
+            $data["id"] = null;
+        }
         $category->id = $data["id"];
         $category->name = $data["name"];
+        $category->slug = $data["slug"];
         $category->parent = $data["parent"];
         SPDOWNLOAD_BOL_CategoryDao::getInstance()->save($category);
 
